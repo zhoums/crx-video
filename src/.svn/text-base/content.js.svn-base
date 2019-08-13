@@ -1,0 +1,77 @@
+ $(function() {
+   setInterval(function() {
+     $("body").click();
+     console.log('body clicked')
+   }, 3000)
+   if ($("div[title='达人主页']").length) {
+     let targetData = {
+       darenHomepage: location.href
+     };
+     let urlSearch = location.search.replace('?', '').split("&");
+     let targetAccountIdItem = urlSearch.filter(item => item.includes('accountId='))
+     targetData.darenId = targetAccountIdItem[0].replace('accountId=', '');
+     //四大DIV
+     let contentDivList = $($($("#abs-block").find('div[data-spm^="daren-header"]')[0]).children()[0]).children();
+     for (let i = 0; i < $(contentDivList[1]).children().length; i++) {
+       if (i == 0) {
+         targetData.darenName = $($(contentDivList[1]).children()[i]).children('span').text();
+         targetData.darenType = $($(contentDivList[1]).children()[i]).children('div').text();
+       } else if (i == 1) {
+         targetData.officialCert = $($(contentDivList[1]).children()[i]).children('span').text().replace("认证：", '');
+       } else if (i == 2) {
+         targetData.darenDesc = $($(contentDivList[1]).children()[i]).children('span').text();
+       }
+     }
+     targetData.fansCount = parseInt($(contentDivList[2]).text())
+     console.log('targetData', targetData)
+     chrome.runtime.sendMessage({
+       greeting: "postDarenData",
+       data: targetData
+     }, function(response) {
+       console.log(response);
+     });
+   }
+   //trigger_v是触发按钮的ID
+   if ($("#trigger_v").length) {
+     $("#trigger_v").on("click", () => {
+       chrome.runtime.sendMessage({
+         greeting: "VSCdarenIdmission",
+       }, function(response) {
+         console.log('response');
+       });
+     })
+   }
+   chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
+     if (request.greeting == "getArctilUrl") {
+       // $("div[data-spm='account_vertical']>a");
+       var url = 'https:' + $("div[data-spm='account_vertical']>a").attr('href');
+       // console.log($("div[data-spm='account_vertical']>a").attr('href'))
+       chrome.runtime.sendMessage({
+         greeting: "sendDarenPage",
+         darenPageUrl: url,
+         islast: request.isLast
+       });
+       sendResponse({
+         authorPageUrl: url
+       });
+     }
+     if (request.greeting == "vmTurnpage") {
+       chrome.runtime.sendMessage({
+         greeting: "VSCmission",
+       });
+     }
+     if (request.greeting == 'v-notLogin') {
+       alert('Please login first!')
+     }
+     if (request.greeting == 'moveErrorTip') {
+       $("#errorTip").remove()
+     }
+     if (request.greeting == 'errorTip') {
+       if ($("#errorTip").length) {
+         $("#errorTip").text(request.tip)
+         return;
+       }
+       $("body").append(`<div id="errorTip" style="position:fixed; padding:5px 10px; background-color:rgba(255,255,255,.8); z-index:1000; right: 10px; top:10px; border:1px solid #f50; color:#f50; ">${request.tip}</div>`)
+     }
+   });
+ })

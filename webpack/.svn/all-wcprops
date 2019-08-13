@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/media-cms-core/!svn/ver/2181/trunk/code/source/plugin/crx-molimedia-tools/webpack
+END
+prod.js
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/media-cms-core/!svn/ver/2181/trunk/code/source/plugin/crx-molimedia-tools/webpack/prod.js
+END
+common.js
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/media-cms-core/!svn/ver/1347/trunk/code/source/plugin/crx-molimedia-tools/webpack/common.js
+END
+local.js
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/media-cms-core/!svn/ver/2181/trunk/code/source/plugin/crx-molimedia-tools/webpack/local.js
+END
+dev.js
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/media-cms-core/!svn/ver/2181/trunk/code/source/plugin/crx-molimedia-tools/webpack/dev.js
+END
